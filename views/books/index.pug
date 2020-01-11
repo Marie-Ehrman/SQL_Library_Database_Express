@@ -1,9 +1,11 @@
 extends ../layout
 
 block content
-    h1= title
+    h1 Library Application
     p
     a.button(href='/books/new') Create New Book
+    br
+    br
     br
     table
         thead
@@ -16,7 +18,7 @@ block content
         each book in books
             tr
                 td
-                    a(href='/books/book')= book.title
+                    a(href=`/books/${book.id}`)= book.title
                 td= book.author
                 td= book.genre
                 td= book.year
