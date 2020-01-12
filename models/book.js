@@ -6,8 +6,7 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
   class Book extends Sequelize.Model {}
   Book.init({
-      // initialize Book model to have the following
-      // attributes (or columns): title, author, genre and year
+      // initialize Book model with: title, author, genre and year
     title: {
       //initialize DataTypes
       type: Sequelize.STRING,

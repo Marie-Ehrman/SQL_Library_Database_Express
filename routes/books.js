@@ -4,7 +4,7 @@ const Book = require('../models').Book; //import the book model with ".Book", we
 
 
 
-//Handler middleware function for route callbacks
+//Middleware handler function for route callbacks
 function asyncHandler(cb){
     return async(req, res, next) => {
       try {
@@ -19,11 +19,11 @@ function asyncHandler(cb){
 //****** SELECT BOOKS LIST
 router.get('/', asyncHandler(async (req, res) => {
 
-      const books = await Book.findAll({ 
+      const books = await Book.findAll({ // get all books from the db
             order: [[ 'title', 'ASC' ]]  // order by title
       } );
 
-      res.render("books/index", { books } );
+      res.render("books/index", { books } ); //render the books list via the index view by passing the books local
 
 }));
 
@@ -42,12 +42,13 @@ router.post('/', asyncHandler(async (req, res) => {
 
       let book;
       try {
-        book = await Book.create(req.body);  //create requires an object that maps the books data
+        book = await Book.create(req.body);  //pass request body to the create method
         res.redirect("/books/" + book.id);
       } catch (error) {
         if(error.name === "SequelizeValidationError") { // check for the SequelizeValidationError error
           book = await Book.build(req.body);
-          res.render("books/new-book", { book, errors: error.errors})
+          console.log(error);
+          res.render("books/form-error", { book, errors: error.errors})
         } else {
           throw error; // error caught in the asyncHandler's catch block
         }
@@ -63,15 +64,14 @@ router.get('/:id', asyncHandler(async (req, res) => {
     if(book) {
       res.render("books/update-book", { book });  
     } else {
-      res.sendStatus(404);
+      res.render("books/page-not-found");  
     }
 
 }));
 
 
 //******** UPDATE BOOK
-//In this case, when building the book instance, we explicitly add the book ID,
-//since the ID is in the URL as a parameter (:id) and not in req.body.
+// explicitly add the book ID since the ID is in the URL as a parameter (:id) and not in req.body.
 router.post('/:id', asyncHandler(async (req, res) => {
 
     let book;
@@ -104,7 +104,7 @@ router.get('/:id/delete', asyncHandler(async (req, res) => {
     if(book) {
       res.render("books/delete", { book });
     } else {
-      res.sendStatus(404);
+      res.render("books/page-not-found");  
     }
 
 }));
@@ -117,7 +117,7 @@ router.post('/:id/delete', asyncHandler(async (req ,res) => {
       await book.destroy();
       res.redirect("/books");
     } else {
-      res.sendStatus(404);
+      res.render("books/page-not-found");  
     }
 
 }));
