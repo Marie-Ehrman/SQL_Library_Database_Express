@@ -65,8 +65,8 @@ router.get('/:id', asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if(book) { //if book exists render it's update page
       res.render("books/update-book", { book }); //pass book object local
-    } else { //else render the no-book page
-      res.render("books/no-book-id");  
+    } else { //else render error page
+      res.sendStatus(404);
     }
 
 }));
@@ -105,7 +105,7 @@ router.get('/:id/delete', asyncHandler(async (req, res) => {
     if(book) {
       res.render("books/delete", { book }); // if found, pass the book to the delete route
     } else {
-      res.render("books/page-not-found");
+      res.sendStatus(404);
     }
 
 }));
@@ -118,7 +118,7 @@ router.post('/:id/delete', asyncHandler(async (req ,res) => {
       await book.destroy(); // delete the book
       res.redirect("/books"); // when book is deleted redirect to list
     } else {
-      res.render("books/page-not-found");
+      res.sendStatus(404);
     }
 
 }));

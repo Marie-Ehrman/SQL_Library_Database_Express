@@ -1,5 +1,12 @@
-h1 Server Error
-p Sorry! There was an unexpected error on the server.
-  br
-p
-  a.button(href='/') Return Home
+extends layout
+
+block content
+
+  h1 Page Not Found
+  h2 Server Error
+  p Sorry! There was an unexpected error on the server.
+  p -OR-
+  p The book id you have entered does not exist.
+    br
+  p
+    a.button(href='/') Return Home
