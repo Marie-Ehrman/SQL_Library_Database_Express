@@ -1,3 +1,4 @@
+//Created using Express Generator
 'use strict';
 
 const fs = require('fs');
@@ -31,8 +32,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-//This means that wherever you use require("./models"), for example,
-//you'll have access to all of Sequelize's methods and functionality via the following exports
+// access to all of Sequelize's methods and functionality via the following exports
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
