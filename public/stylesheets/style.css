@@ -1,5 +1,4 @@
 body {
-  background: rgb(235, 231, 231);
   padding: 10px 50px 50px;
   font: 18px "Garamond", serif;
 }
@@ -12,15 +11,15 @@ a {
 }
 
   a:hover {
-    color: rgb(72, 69, 67);
+    color: rgb(108, 175, 198);
   }
 
 a.button, input[type=submit] {
   color: white;
   background: #D8B493;
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
-  padding: 10px 14px 12px;
-  font-size: 14px;
+  padding: 8px 12px 10px;
+  font-size: 12px;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -30,17 +29,13 @@ form a.button, input[type=submit] {
   transition: 0.4s;
 }
 
-.errors {
-  color: red;
-}
-
 input[type=submit] {
   border: 0;
 }
 
   a.button:hover, input[type=submit]:hover {
-    color: rgb(72, 69, 67);
-    background-color: #D8B493;
+    color: rgb(108, 175, 198);
+    background-color: rgb(86, 101, 113);
   }
 
 p {
@@ -109,6 +104,7 @@ input[type=text] {
   width: 300px;
 }
 
-.error {
-  color: rgb(236, 15, 15);
+.errors {
+  color: rgb(245, 123, 123);
+  text-align: center;
 }
