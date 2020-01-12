@@ -18,11 +18,13 @@ app.use(express.urlencoded({ extended: false })); // provides access to the requ
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//direct user to the books route
 app.use('/', routes);
 app.use('/books', books);
 
 // catch 404 and forward to error handler
 app.use( (req, res, next) => {
+  res.render('books/page-not-found');
   next(createError(404));
 });
 

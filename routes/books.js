@@ -6,13 +6,15 @@ const Book = require('../models').Book; //import the book model with ".Book", we
 
 //Middleware handler function for route callbacks
 function asyncHandler(cb){
-    return async(req, res, next) => {
-      try {
-        await cb(req, res, next)
-      } catch(error){
-        res.status(500).send(error);
+
+      return async(req, res, next) => {
+        try {
+          await cb(req, res, next)
+        } catch(error){
+          res.status(500).send(error);
+        }
       }
-    }
+
 }
 
 
@@ -29,8 +31,9 @@ router.get('/', asyncHandler(async (req, res) => {
 
 
 //****** NEW BOOK FORM
-// When the path is books/new the "new" pug template is rendered passing it an empty book object
 router.get('/new', (req, res) => {
+// When the path is books/new the "new" pug template is rendered
+// passing the form an empty book object
 
       res.render("books/new-book", { book: {} });
 
@@ -42,29 +45,28 @@ router.post('/', asyncHandler(async (req, res) => {
 
       let book;
       try {
-        book = await Book.create(req.body);  //pass request body to the create method
-        res.redirect("/books/" + book.id);
+        book = await Book.create(req.body);  // pass request body to the create method
+        res.redirect("/books/" + book.id);   // redirect to the books/id path after created
       } catch (error) {
         if(error.name === "SequelizeValidationError") { // check for the SequelizeValidationError error
           book = await Book.build(req.body);
-          console.log(error);
           res.render("books/form-error", { book, errors: error.errors})
         } else {
           throw error; // error caught in the asyncHandler's catch block
         }
       }
 
-  })); //sequelize creates an autoincrementing id, we will use this to add it to the books path
+  }));
 
 
 //******** SELECT BOOK BY ITS ID
 router.get('/:id', asyncHandler(async (req, res) => {
-
+    // find book by its id
     const book = await Book.findByPk(req.params.id);
-    if(book) {
-      res.render("books/update-book", { book });  
-    } else {
-      res.render("books/page-not-found");  
+    if(book) { //if book exists render it's update page
+      res.render("books/update-book", { book }); //pass book object local
+    } else { //else render the no-book page
+      res.render("books/no-book-id");  
     }
 
 }));
@@ -76,19 +78,18 @@ router.post('/:id', asyncHandler(async (req, res) => {
 
     let book;
     try {
-      book = await Book.findByPk(req.params.id);
+      book = await Book.findByPk(req.params.id); //find book by id
       if(book) {
-        await book.update(req.body);
-        console.log(book);
-        res.redirect("/books/" + book.id); 
+        await book.update(req.body); // if id exists, update the Book properties
+        res.redirect("/books/" + book.id); // redirect to that book's update page
       } else {
-        res.sendStatus(404);
+        res.sendStatus(404); // if book does not exist, send 404 error
       }
     } catch (error) {
       if(error.name === "SequelizeValidationError") {
         book = await Book.build(req.body);
-        book.id = req.params.id; // make sure correct book gets updated
-        res.render("books/update-book", { book, errors: error.errors})
+        book.id = req.params.id; // update correct book
+        res.render("books/update-book", { book, errors: error.errors}) // render updated book info, but display errors
       } else {
         throw error;
       }
@@ -97,27 +98,27 @@ router.post('/:id', asyncHandler(async (req, res) => {
 }));
 
 
-//******** DELETE BOOK FORM
+//******** DELETE BOOK GET
 router.get('/:id/delete', asyncHandler(async (req, res) => {
-
-    const book = await Book.findByPk(req.params.id);
+    // get the book to delete
+    const book = await Book.findByPk(req.params.id); // find book by id
     if(book) {
-      res.render("books/delete", { book });
+      res.render("books/delete", { book }); // if found, pass the book to the delete route
     } else {
-      res.render("books/page-not-found");  
+      res.render("books/page-not-found");
     }
 
 }));
 
-//******** DELETE BOOK
+//******** DELETE BOOK POST
 router.post('/:id/delete', asyncHandler(async (req ,res) => {
-
+    // post the delete
     const book = await Book.findByPk(req.params.id);
     if(book) {
-      await book.destroy();
-      res.redirect("/books");
+      await book.destroy(); // delete the book
+      res.redirect("/books"); // when book is deleted redirect to list
     } else {
-      res.render("books/page-not-found");  
+      res.render("books/page-not-found");
     }
 
 }));
