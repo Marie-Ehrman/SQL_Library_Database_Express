@@ -42,7 +42,7 @@ router.get('/new', (req, res) => {
 
 //******** CREATE BOOK
 router.post('/', asyncHandler(async (req, res) => {
-
+      // create a new book
       let book;
       try {
         book = await Book.create(req.body);  // pass request body to the create method
