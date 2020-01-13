@@ -6,7 +6,10 @@
 
  Users can also enter a new book to the database but must fill out all the required fields.
 
-
+## Deploying App
+- Install from terminal: `> npm install`
+- Run from terminal: `> npm start`
+- Navigate to `localhost:3000` in your browser
 
  ## Technology
 Project files initialized with Express Generator CLI and Sequelize CLI

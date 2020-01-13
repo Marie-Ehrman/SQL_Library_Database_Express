@@ -1,3 +1,5 @@
+//Initialized with Express Generator
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -18,7 +20,7 @@ app.use(express.urlencoded({ extended: false })); // provides access to the requ
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//direct user to the books route
+// direct user to the books listing home page
 app.use('/', routes);
 app.use('/books', books);
 
@@ -32,11 +34,10 @@ app.use( (err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
-    console.log(err.status);
+
     // render the error page
     res.status(err.status || 500);
     if(err.status === 404){
-      console.log(err.status);
       res.render('books/page-not-found');
     } else {
       res.render('error');

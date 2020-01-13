@@ -3,14 +3,13 @@ const router = express.Router();
 const Book = require('../models').Book; //import the book model with ".Book", we can now use all ORM methods
 
 
-
 //Middleware handler function for route callbacks
 function asyncHandler(cb){
 
       return async(req, res, next) => {
         try {
           await cb(req, res, next)
-        } catch(error){
+        } catch(error){ // handle rejected promise
           res.status(500).send(error);
         }
       }
@@ -52,7 +51,7 @@ router.post('/', asyncHandler(async (req, res) => {
           book = await Book.build(req.body);
           res.render("books/form-error", { book, errors: error.errors})
         } else {
-          throw error; // error caught in the asyncHandler's catch block
+          throw error; // throw error to asyncHandler's catch block
         }
       }
 
@@ -66,7 +65,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
     if(book) { //if book exists render it's update page
       res.render("books/update-book", { book }); //pass book object local
     } else { //else render error page
-      res.sendStatus(404);
+      res.render('error');
     }
 
 }));
@@ -83,7 +82,7 @@ router.post('/:id', asyncHandler(async (req, res) => {
         await book.update(req.body); // if id exists, update the Book properties
         res.redirect("/books/" + book.id); // redirect to that book's update page
       } else {
-        res.sendStatus(404); // if book does not exist, send 404 error
+        res.sendStatus(404); //else send 404 error to the client
       }
     } catch (error) {
       if(error.name === "SequelizeValidationError") {
@@ -105,7 +104,7 @@ router.get('/:id/delete', asyncHandler(async (req, res) => {
     if(book) {
       res.render("books/delete", { book }); // if found, pass the book to the delete route
     } else {
-      res.sendStatus(404);
+      res.sendStatus(404); //else send 404 error to the client
     }
 
 }));
@@ -118,7 +117,7 @@ router.post('/:id/delete', asyncHandler(async (req ,res) => {
       await book.destroy(); // delete the book
       res.redirect("/books"); // when book is deleted redirect to list
     } else {
-      res.sendStatus(404);
+      res.sendStatus(404); //else send 404 error to the client
     }
 
 }));
