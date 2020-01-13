@@ -31,16 +31,17 @@ app.use( (req, res, next) => {
 
 // error handler
 app.use( (err, req, res, next) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    if(err.status === 404){
-      res.render('books/page-not-found');
-    } else {
-      res.render('error');
+   
+    // render the error page according to error
+    switch (err.status) {
+      case 400:
+        res.render('books/no-book-id'); //if error is 400, render the no-book-id view
+        break;
+      case 404:
+        res.render('books/page-not-found'); //if error is 404, render page-not-found view
+        break;
+      default:
+        res.render('error'); //else render the error view
     }
 });
 

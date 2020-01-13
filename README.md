@@ -8,7 +8,7 @@
 
 ## Deploying App
 - Install from terminal: `> npm install`
-- Run from terminal: `> npm start`
+- Launch from terminal: `> npm start`
 - Navigate to `localhost:3000` in your browser
 
  ## Technology

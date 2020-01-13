@@ -59,13 +59,15 @@ router.post('/', asyncHandler(async (req, res) => {
 
 
 //******** SELECT BOOK BY ITS ID
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id', asyncHandler(async (req, res, next) => {
     // find book by its id
     const book = await Book.findByPk(req.params.id);
     if(book) { //if book exists render it's update page
-      res.render("books/update-book", { book }); //pass book object local
-    } else { //else render error page
-      res.render('error');
+        res.render("books/update-book", { book }); //pass book object local
+    } else { //else send 400 error to client
+        const err = new Error();
+        err.status = 400;
+        next(err);
     }
 
 }));
@@ -81,9 +83,11 @@ router.post('/:id', asyncHandler(async (req, res) => {
       if(book) {
         await book.update(req.body); // if id exists, update the Book properties
         res.redirect("/books/" + book.id); // redirect to that book's update page
-      } else {
-        res.sendStatus(404); //else send 404 error to the client
-      }
+      } else { //else send 400 error to client
+        const err = new Error();
+        err.status = 400;
+        next(err);
+    }
     } catch (error) {
       if(error.name === "SequelizeValidationError") {
         book = await Book.build(req.body);
