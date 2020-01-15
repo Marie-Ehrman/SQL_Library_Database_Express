@@ -40,7 +40,7 @@ router.get('/new', (req, res) => {
 
 
 //******** CREATE BOOK
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/new', asyncHandler(async (req, res) => {
       // create a new book
       let book;
       try {
@@ -83,7 +83,7 @@ router.post('/:id', asyncHandler(async (req, res) => {
       if(book) {
         await book.update(req.body); // if id exists, update the Book properties
         res.redirect("/books/" + book.id); // redirect to that book's update page
-      } else { //else send 400 error to client
+    } else { //else send 400 error to client
         const err = new Error();
         err.status = 400;
         next(err);
